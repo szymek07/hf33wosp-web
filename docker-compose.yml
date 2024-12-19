@@ -1,0 +1,20 @@
+version: "3"
+services:
+  dyplomy:
+    build: .
+    environment:
+      ENVIRONMENT: prod
+    ports:
+    - 8088:80
+    restart: always
+  db:
+    image: mariadb:11.2.2
+    environment:
+      MARIADB_ROOT_PASSWORD: 0F7VyXnAkCxwJnqDbRcZ
+      MYSQL_DATABASE: hf33wosp
+      MYSQL_USER: hf33wosp
+      MYSQL_PASSWORD: ZNbAfVyxYtGAIY5vga3u
+    ports:
+    - 3307:3306
+    volumes:
+    - /srv/dyplomy-db:/var/lib/mysql

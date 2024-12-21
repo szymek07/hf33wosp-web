@@ -1,0 +1,234 @@
+<style>
+  main {
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    box-sizing: inherit;
+    position: relative;
+    background-color: #b6b4b4;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+
+  .zhp-logo {
+    width: 100px;
+    height: auto;
+    display: block;
+    margin-right: 20px;
+  }
+
+  .content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 3rem;
+  }
+
+  .content form {
+    display: flex;
+    align-items: center;
+  }
+
+  .content form label {
+    /*margin-right: 10px;*/
+  }
+
+  .content form input {
+    /*margin-right: 10px;*/
+  }
+
+  .margin {
+    margin-right: 10px;
+  }
+
+  .spinner {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    margin: auto;
+  }
+
+  .small-text {
+    font-size: 12px;
+    vertical-align: middle;
+  }
+
+  .fix-col-size {
+    width: 60px;
+  }
+
+  .header-col {
+    background-color: #cdcdd3;
+    text-align: center;
+
+  }
+
+  .date-col {
+    background-color: #cdcdd3;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .oth-col {
+    background-color: #ececf3;
+    text-align: center;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+
+</style>
+
+<main class="main">
+
+  <div >
+
+    <div class="header">
+      <img src="https://sp6zhp.pl/wp-content/uploads/2023/12/logo-zhp.png" alt="Logo ZHP" class="zhp-logo">
+      <h3>HF33WOSP</h3>
+    </div>
+
+    <div>
+    <p>
+      Dziękujemy za udział w akcji dyplomowej pod znakiem HF33WOSP zorganizowanej przez Harcerski Klub Łączności RadioAktywni! <br />
+      Znajdziesz tutaj informacje na temat naszych planowanych aktywności.
+    </p>
+    <hr />
+    </div>
+
+    <div class="m" *ngIf="activityResponse.length > 0 && !loading">
+      <h3>On The Air</h3>
+      <table class="table table-sm table-bordered small-text border-secondary">
+        <thead class="thead-dark">
+        <tr>
+          <th class="header-col">Pasmo</th>
+          <th class="header-col">Modulacja</th>
+          <th class="header-col">Częstotliwość [MHz]</th>
+          <th class="header-col">Data/Godzina [UTC]</th>
+          <th class="header-col">Upłynęło od ostatniej aktywności</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let response of activityResponse; let i = index">
+          <td class="fix-col-size oth-col">{{ response.band }}</td>
+          <td class="fix-col-size oth-col">{{ response.mode }}</td>
+          <td class="fix-col-size oth-col">{{ convertToMHz(response.freq) }}</td>
+          <td class="fix-col-size oth-col">{{ response.timeOn }}</td>
+          <td class="fix-col-size oth-col">{{ response.timeAgo }}</td>
+        </tr>
+        </tbody>
+      </table>
+      <hr />
+    </div>
+
+    <div  *ngIf="scheduleResponse.length > 0 && !loading">
+      <h3>Harmonogram pracy operatorów pod znakiem HF33WOSP</h3>
+      <table class="table table-sm table-bordered small-text border-secondary">
+      <thead class="thead-dark">
+      <tr>
+        <th class="header-col">Data/Godzina</th>
+        <th class="fix-col-size header-col" *ngFor="let hour of hours">{{ hour }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let response of scheduleResponse; let i = index">
+        <td class="fix-col-size date-col">{{ response.dateStr }}</td>
+        <td class="fix-col-size oth-col" *ngFor="let hour of hours">{{ response[hour.toString()] }}</td>
+
+      </tr>
+      </tbody>
+    </table>
+    <hr />
+    </div>
+
+
+
+    <h3>Wpisz swój znak aby pobrać dyplom</h3>
+
+    <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
+      <div class="content">
+        <label class="margin" for="call">
+          <b>Znak:</b>
+        </label>
+        <input class="form-control margin" id="call" name="call" [(ngModel)]="call" required/>
+        <button class="btn btn-primary"  type="submit" [disabled]="userForm.invalid">Submit</button>
+      </div>
+    </form>
+
+    <div  *ngIf="apiResponse == undefined && submitted && !loading">
+        <h3>Brak informacji o zdobytych punktach dla znaku: {{ call }}</h3>
+    </div>
+
+    <div  *ngIf="apiResponse != undefined && submitted && !loading">
+      <h3>Suma zdobytych punktów: {{ apiResponse.points }}</h3>
+    </div>
+
+    <div  *ngIf="apiResponse != undefined && submitted && !loading && apiResponse.points >= 2">
+      <h3>TODO: Pobierz dyplom</h3>
+      <img [src]="'http://127.0.0.1:8080/hf33wosp-get-image?call=' + call" alt="Obrazek z endpointu" width="600">
+      <br />
+      <a [href]="'http://127.0.0.1:8080/hf33wosp-get-image?call=' + call" target="blank" download="dyplom.jpg" class="btn btn-success mt-3">
+        Pobierz dyplom
+      </a>
+    </div>
+
+
+      <!--    <div *ngIf="loading" class="spinner">-->
+<!--      &lt;!&ndash; Możesz użyć CSS do stylizacji kręciołka &ndash;&gt;-->
+<!--      Ładowanie...-->
+<!--    </div>-->
+
+<!--    <div  *ngIf="apiResponse.length > 0 && !loading">-->
+<!--      <h3>Znaleziono następujące informacje o kartach QSL</h3>-->
+<!--      <table class="table table-striped">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--          <th>#</th>-->
+<!--          <th>Znak</th>-->
+<!--          <th>Liczba kart QSL</th>-->
+<!--          <th>Data wprowadzenia informacji</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr *ngFor="let response of apiResponse; let i = index">-->
+<!--          <td>{{ i + 1 }}</td>-->
+<!--          <td class="call">{{ response.callsign }}</td>-->
+<!--          <td>{{ response.qty }}</td>-->
+<!--          <td>{{ response.lastUpdated | date:'yyyy-MM-dd HH:mm' }}</td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--      </table>-->
+<!--    </div>-->
+
+<!--    <div  *ngIf="apiResponse.length == 0 && submitted && !loading">-->
+<!--      <h3>Brak informacji o kartach QSL dla znaku: {{ call }}</h3>-->
+<!--    </div>-->
+
+    <div class="header"></div>
+
+    <hr/>
+
+    <div >
+      <span>Zapraszamy do odwiedzenia naszej strony klubowej: </span>
+      <a href="https://sp6zhp.pl/">sp6zhp.pl</a>
+    </div>
+
+  </div>
+
+</main>
+
+<router-outlet />

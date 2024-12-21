@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
   }
 
   getActivity() {
-    const url = `/api/last-heard?stationId=13&limit=10&diffInSec=50000`;
+    const url = `/api/last-heard?stationId=13&limit=10&diffInSec=1800`;
     this.loadingLastHrd = true;
     this.http.get<ActivityResponse[]>(url).subscribe(
       response => {

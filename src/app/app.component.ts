@@ -15,7 +15,9 @@ import { ActivityResponse } from './activity.model';
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
-  loading: boolean = false;
+  loadingLastHrd: boolean = false;
+  loadingSchedule: boolean = false;
+  loadingAward: boolean = false;
   scheduleResponse: ScheduleResponse[] = [];
   activityResponse: ActivityResponse[] = [];
 
@@ -28,56 +30,54 @@ export class AppComponent implements OnInit {
 
   getSchedule() {
     const url = `https://mws02-51615.wykr.es/webhook/get_schedule_json`;
-    this.loading = true;
+    this.loadingSchedule = true;
     this.http.get<ScheduleResponse[]>(url).subscribe(
       response => {
         this.scheduleResponse = response;
-        this.loading = false;
+        this.loadingSchedule = false;
         console.log('Schedule response:', this.scheduleResponse);
       },
       error => {
-        this.loading = false;
+        this.loadingSchedule = false;
         console.error('API error:', error);
       }
     );
   }
 
   getActivity() {
-    const url = `http://127.0.0.1:8080/api/last-heard?stationId=13&limit=10&diffInSec=50000`;
-    this.loading = true;
+    const url = `/api/last-heard?stationId=13&limit=10&diffInSec=50000`;
+    this.loadingLastHrd = true;
     this.http.get<ActivityResponse[]>(url).subscribe(
       response => {
         this.activityResponse = response;
-        this.loading = false;
-        console.log('Activity response:', this.activityResponse);
+        this.loadingLastHrd = false;
+        // console.log('Activity response:', this.activityResponse);
       },
       error => {
-        this.loading = false;
-        console.error('API error:', error);
+        this.loadingLastHrd = false;
+        // console.error('API error:', error);
       }
     );
   }
 
   onSubmit(form: any) {
-    console.log('Form submitted:', form.value);
+    // console.log('Form submitted:', form.value);
     this.submitted = true;
-
     this.makeApiCall(this.call);
   }
 
   makeApiCall(callValue: string) {
-    // TODO: poprawić station id na 13
-    const url = `http://127.0.0.1:8080/api/points?stationId=10&call=${callValue}`;
-    this.loading = true;
+    const url = `/api/points?stationId=13&call=${callValue}`;
+    this.loadingAward = true;
     this.http.get<ApiResponse>(url).subscribe(
       response => {
         this.apiResponse = response;
-        this.loading = false;
-        console.log('API response:', response);
+        this.loadingAward = false;
+        // console.log('API response:', response);
       },
       error => {
-        this.loading = false;
-        console.error('API error:', error);
+        this.loadingAward = false;
+        // console.error('API error:', error);
       }
     );
   }

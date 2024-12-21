@@ -107,10 +107,15 @@
       Dziękujemy za udział w akcji dyplomowej pod znakiem HF33WOSP zorganizowanej przez Harcerski Klub Łączności RadioAktywni! <br />
       Znajdziesz tutaj informacje na temat naszych planowanych aktywności.
     </p>
+      <p> Regulamin akcji dyplomowej znajdziesz tu:
+        <a href="https://www.qrz.com/db/HF33WOSP" target="blank">HF33WOSP</a>
+      </p>
     <hr />
     </div>
 
-    <div class="m" *ngIf="activityResponse.length > 0 && !loading">
+    <div *ngIf="loadingLastHrd" class="spinner">
+    </div>
+    <div class="m" *ngIf="activityResponse.length > 0 && !loadingLastHrd">
       <h3>On The Air</h3>
       <table class="table table-sm table-bordered small-text border-secondary">
         <thead class="thead-dark">
@@ -135,7 +140,9 @@
       <hr />
     </div>
 
-    <div  *ngIf="scheduleResponse.length > 0 && !loading">
+    <div *ngIf="loadingSchedule" class="spinner">
+    </div>
+    <div  *ngIf="scheduleResponse.length > 0 && !loadingSchedule">
       <h3>Harmonogram pracy operatorów pod znakiem HF33WOSP</h3>
       <table class="table table-sm table-bordered small-text border-secondary">
       <thead class="thead-dark">
@@ -152,10 +159,8 @@
       </tr>
       </tbody>
     </table>
-    <hr />
     </div>
-
-
+    <hr />
 
     <h3>Wpisz swój znak aby pobrać dyplom</h3>
 
@@ -169,53 +174,24 @@
       </div>
     </form>
 
-    <div  *ngIf="apiResponse == undefined && submitted && !loading">
+    <div *ngIf="loadingAward" class="spinner">
+    </div>
+
+    <div  *ngIf="apiResponse == undefined && submitted && !loadingAward">
         <h3>Brak informacji o zdobytych punktach dla znaku: {{ call }}</h3>
     </div>
 
-    <div  *ngIf="apiResponse != undefined && submitted && !loading">
+    <div  *ngIf="apiResponse != undefined && submitted && !loadingAward">
       <h3>Suma zdobytych punktów: {{ apiResponse.points }}</h3>
     </div>
 
-    <div  *ngIf="apiResponse != undefined && submitted && !loading && apiResponse.points >= 2">
-      <img [src]="'http://127.0.0.1:8080/api/hf33wosp-get-image?call=' + call" alt="Obrazek z endpointu" width="600">
+    <div  *ngIf="apiResponse != undefined && submitted && !loadingAward && apiResponse.points >= 2">
+      <img [src]="'/api/hf33wosp-get-image?call=' + call" alt="Obrazek z endpointu" width="600">
       <br />
-      <a [href]="'http://127.0.0.1:8080/api/hf33wosp-get-image?call=' + call" target="blank" download="dyplom.jpg" class="btn btn-success mt-3">
+      <a [href]="'/api/hf33wosp-get-image?call=' + call" target="blank" download="dyplom.jpg" class="btn btn-success mt-3">
         Pobierz dyplom
       </a>
     </div>
-
-
-      <!--    <div *ngIf="loading" class="spinner">-->
-<!--      &lt;!&ndash; Możesz użyć CSS do stylizacji kręciołka &ndash;&gt;-->
-<!--      Ładowanie...-->
-<!--    </div>-->
-
-<!--    <div  *ngIf="apiResponse.length > 0 && !loading">-->
-<!--      <h3>Znaleziono następujące informacje o kartach QSL</h3>-->
-<!--      <table class="table table-striped">-->
-<!--        <thead>-->
-<!--        <tr>-->
-<!--          <th>#</th>-->
-<!--          <th>Znak</th>-->
-<!--          <th>Liczba kart QSL</th>-->
-<!--          <th>Data wprowadzenia informacji</th>-->
-<!--        </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--        <tr *ngFor="let response of apiResponse; let i = index">-->
-<!--          <td>{{ i + 1 }}</td>-->
-<!--          <td class="call">{{ response.callsign }}</td>-->
-<!--          <td>{{ response.qty }}</td>-->
-<!--          <td>{{ response.lastUpdated | date:'yyyy-MM-dd HH:mm' }}</td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--      </table>-->
-<!--    </div>-->
-
-<!--    <div  *ngIf="apiResponse.length == 0 && submitted && !loading">-->
-<!--      <h3>Brak informacji o kartach QSL dla znaku: {{ call }}</h3>-->
-<!--    </div>-->
 
     <div class="header"></div>
 

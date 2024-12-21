@@ -178,10 +178,9 @@
     </div>
 
     <div  *ngIf="apiResponse != undefined && submitted && !loading && apiResponse.points >= 2">
-      <h3>TODO: Pobierz dyplom</h3>
-      <img [src]="'http://127.0.0.1:8080/hf33wosp-get-image?call=' + call" alt="Obrazek z endpointu" width="600">
+      <img [src]="'http://127.0.0.1:8080/api/hf33wosp-get-image?call=' + call" alt="Obrazek z endpointu" width="600">
       <br />
-      <a [href]="'http://127.0.0.1:8080/hf33wosp-get-image?call=' + call" target="blank" download="dyplom.jpg" class="btn btn-success mt-3">
+      <a [href]="'http://127.0.0.1:8080/api/hf33wosp-get-image?call=' + call" target="blank" download="dyplom.jpg" class="btn btn-success mt-3">
         Pobierz dyplom
       </a>
     </div>

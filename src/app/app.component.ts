@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
   }
 
   getActivity() {
-    const url = `http://127.0.0.1:8080/last-heard?stationId=13&limit=10&diffInSec=50000`;
+    const url = `http://127.0.0.1:8080/api/last-heard?stationId=13&limit=10&diffInSec=50000`;
     this.loading = true;
     this.http.get<ActivityResponse[]>(url).subscribe(
       response => {
@@ -67,7 +67,7 @@ export class AppComponent implements OnInit {
 
   makeApiCall(callValue: string) {
     // TODO: poprawić station id na 13
-    const url = `http://127.0.0.1:8080/points?stationId=10&call=${callValue}`;
+    const url = `http://127.0.0.1:8080/api/points?stationId=10&call=${callValue}`;
     this.loading = true;
     this.http.get<ApiResponse>(url).subscribe(
       response => {

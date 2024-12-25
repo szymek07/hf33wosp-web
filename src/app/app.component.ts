@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
 
 
   getSchedule() {
-    const url = `https://mws02-51615.wykr.es/webhook/get_schedule_json`;
+    const url = `/api/schedule`;
     this.loadingSchedule = true;
     this.http.get<ScheduleResponse[]>(url).subscribe(
       response => {

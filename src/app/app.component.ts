@@ -75,7 +75,7 @@ export class AppComponent implements OnInit {
   }
 
   makeApiCall(callValue: string) {
-    const url = `http://localhost:8080/api/points?stationId=13&call=${callValue}`;
+    const url = `/api/points?stationId=13&call=${callValue}`;
     this.loadingAward = true;
     this.http.get<ApiResponse>(url).subscribe(
       response => {

@@ -63,19 +63,25 @@ export class AppComponent implements OnInit {
   }
 
   onSubmit(form: any) {
-    // console.log('Form submitted:', form.value);
+    // console.log('Form submitted: ', form.value);
+    // console.log('Form valid:', form.valid);
     this.submitted = true;
     this.makeApiCall(this.call);
   }
 
+  resetSubmitted(): void {
+    console.log('Resetting Form');
+    this.submitted = false;
+  }
+
   makeApiCall(callValue: string) {
-    const url = `/api/points?stationId=13&call=${callValue}`;
+    const url = `http://localhost:8080/api/points?stationId=13&call=${callValue}`;
     this.loadingAward = true;
     this.http.get<ApiResponse>(url).subscribe(
       response => {
         this.apiResponse = response;
         this.loadingAward = false;
-        // console.log('API response:', response);
+        console.log('API response:', response);
       },
       error => {
         this.loadingAward = false;

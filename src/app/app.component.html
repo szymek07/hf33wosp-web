@@ -103,17 +103,17 @@
     </div>
 
     <div>
-    <p>
-      Dziękujemy za udział w akcji dyplomowej pod znakiem HF33WOSP zorganizowanej przez Harcerski Klub Łączności RadioAktywni! <br />
-      Znajdziesz tutaj informacje na temat naszych planowanych aktywności.
-    </p>
-    <p> Regulamin akcji dyplomowej znajdziesz tu:
-      <a href="https://www.qrz.com/db/HF33WOSP" target="blank">HF33WOSP</a>
-    </p>
-    <p> eSkarbonka:
-      <a href="https://eskarbonka.wosp.org.pl/kucyberujy" target="blank">#5444 Hufiec Wrocław Wschód</a>
-    </p>
-    <hr />
+      <p>
+        Dziękujemy za udział w akcji dyplomowej pod znakiem HF33WOSP zorganizowanej przez Harcerski Klub Łączności RadioAktywni! <br />
+        Znajdziesz tutaj informacje na temat naszych planowanych aktywności.
+      </p>
+      <p> Regulamin akcji dyplomowej znajdziesz tu:
+        <a href="https://www.qrz.com/db/HF33WOSP" target="blank">HF33WOSP</a>
+      </p>
+      <p> eSkarbonka:
+        <a href="https://eskarbonka.wosp.org.pl/kucyberujy" target="blank">#5444 Hufiec Wrocław Wschód</a>
+      </p>
+      <hr />
     </div>
 
     <div *ngIf="loadingLastHrd" class="spinner">
@@ -173,7 +173,7 @@
         <label class="margin" for="call">
           <b>Znak:</b>
         </label>
-        <input class="form-control margin" id="call" name="call" [(ngModel)]="call" required/>
+        <input class="form-control margin" id="call" name="call" [(ngModel)]="call" (ngModelChange)="resetSubmitted()" required/>
         <button class="btn btn-primary"  type="submit" [disabled]="userForm.invalid">Submit</button>
       </div>
     </form>

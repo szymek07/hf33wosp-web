@@ -187,7 +187,9 @@
     </div>
 
     <div  *ngIf="apiResponse != undefined && submitted && !loadingAward && apiResponse.points >= 2">
-      <img [src]="'/api/hf33wosp-get-image?call=' + call" alt="Obrazek z endpointu" width="600">
+      <img [src]="'/api/hf33wosp-get-image?call=' + call" (load)="onImageLoad()" alt="Obrazek z endpointu" width="600">
+      <div *ngIf="loadingImage" class="spinner">
+      </div>
       <br />
       <a [href]="'/api/hf33wosp-get-image?call=' + call" target="blank" download="dyplom.jpg" class="btn btn-success mt-3">
         Pobierz dyplom

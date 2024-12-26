@@ -27,6 +27,8 @@ export class AppComponent implements OnInit {
   submitted: boolean = false;
   apiResponse: ApiResponse | undefined;
 
+  loadingImage: boolean = true;
+
 
   getSchedule() {
     const url = `/api/schedule`;
@@ -87,6 +89,9 @@ export class AppComponent implements OnInit {
     return freqNumber / 1_000_000;       // Konwersja na MHz
   }
 
+  onImageLoad() {
+    this.loadingImage = false; // Kiedy obraz wczytany, ukryj kręciołek
+  }
 
   constructor(private http: HttpClient) {}
 

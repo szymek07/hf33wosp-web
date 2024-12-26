@@ -153,14 +153,15 @@
       </thead>
       <tbody>
       <tr *ngFor="let response of scheduleResponse; let i = index">
-        <td class="fix-col-size date-col">{{ response.dateStr }}</td>
-        <td class="fix-col-size oth-col" *ngFor="let hour of hours">{{ response[hour.toString()] }}</td>
+        <td class="fix-col-size date-col">{{ response.date }}</td>
+        <td class="fix-col-size oth-col" *ngFor="let hour of hours">{{ response["h" + hour.toString()] }}</td>
 
       </tr>
       </tbody>
-    </table>
+      </table>
+      <hr />
     </div>
-    <hr />
+
 
     <h3>Wpisz swój znak aby pobrać dyplom</h3>
 

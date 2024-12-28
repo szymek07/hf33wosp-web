@@ -91,12 +91,12 @@ export class AppComponent implements OnInit {
   }
 
   convertToMHz(freq: string): number {
-    const freqNumber = parseFloat(freq); // Zamiana stringa na liczbę
-    return freqNumber / 1_000_000;       // Konwersja na MHz
+    const freqNumber = parseFloat(freq);
+    return freqNumber / 1_000_000;
   }
 
   onImageLoad() {
-    this.loadingImage = false; // Kiedy obraz wczytany, ukryj kręciołek
+    this.loadingImage = false;
   }
 
   constructor(private http: HttpClient) {}

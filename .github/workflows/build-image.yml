@@ -41,6 +41,8 @@ jobs:
 #    - name: debug
 #      run: echo "::notice ${{ steps.meta.outputs.tags }}"
 
+    - name: debug
+      run: echo "::notice REG=${{ env.REGISTRY }} NS=${{ env.IMAGE_NS}} IMG=${{ env.IMAGE_NAME }}"
 
     - name: Build and push to dockerhub
       id: push

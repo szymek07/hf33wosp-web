@@ -43,7 +43,7 @@ jobs:
       with:
        context: .
        push: true
-       tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NS}}/latest
+       tags: ${{ env.IMAGE_NS}}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}
        #labels: ${{ steps.meta.outputs.labels }}
 
     - name: Generate artifact attestation

@@ -38,6 +38,10 @@ jobs:
       with:
         images: ${{ env.IMAGE_NS}}/${{ env.IMAGE_NAME }}
 
+    - name: debug
+      run: echo "::notice ${{ steps.meta.outputs.tags }}"
+
+
     - name: Build and push to dockerhub
       id: push
       uses: docker/build-push-action@v5

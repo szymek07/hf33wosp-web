@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -14,7 +14,10 @@ import { ActivityResponse } from './activity.model';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+  isSmallScreen: boolean = false;
+  mediaQueryList!: MediaQueryList;
+
   loadingLastHrd: boolean = false;
   loadingSchedule: boolean = false;
   loadingAward: boolean = false;
@@ -36,8 +39,13 @@ export class AppComponent implements OnInit {
     this.http.get<ScheduleResponse[]>(url).subscribe(
       response => {
         this.scheduleResponse = response;
+        if (this.isSmallScreen) {
+          console.log("Small screen - filtering result to present and future days and occupied hours");
+          this.filterDates();
+          this.filterHours();
+        }
         this.loadingSchedule = false;
-        console.log('Schedule response:', this.scheduleResponse);
+        // console.log('Schedule response:', this.scheduleResponse);
       },
       error => {
         this.loadingSchedule = false;
@@ -81,7 +89,7 @@ export class AppComponent implements OnInit {
       response => {
         this.apiResponse = response;
         this.loadingAward = false;
-        console.log('API response:', response);
+        // console.log('API response:', response);
       },
       error => {
         this.loadingAward = false;
@@ -95,6 +103,39 @@ export class AppComponent implements OnInit {
     return freqNumber / 1_000_000;
   }
 
+  filterDates(): void {
+    // console.log("Filter dates");
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    // console.log("Today: ", today);
+
+    const filteredDates = this.scheduleResponse.filter( e => new Date(e.date) >= today);
+
+    // console.log("Filtered dates", filteredDates);
+    this.scheduleResponse = filteredDates;
+  }
+
+
+  filterHours(): void {
+    // console.log("Filter hours");
+    const hoursWithValues: string[] = [];
+
+    this.scheduleResponse.forEach(entry => {
+      Object.keys(entry).forEach(key => {
+        if (key.startsWith('h') && entry[key]) {
+          hoursWithValues.push(`${key.substring(1)}`);
+        }
+      });
+    });
+
+    // console.log("Filtered not unique", hoursWithValues);
+    const uniqueSortedNumbers = Array.from(new Set(hoursWithValues)).sort((a, b) => Number(a) - Number(b));
+    // console.log("Unique", uniqueSortedNumbers);
+    this.hours = uniqueSortedNumbers;
+  }
+
+
   onImageLoad() {
     this.loadingImage = false;
   }
@@ -104,7 +145,20 @@ export class AppComponent implements OnInit {
   title = 'HF33WOSP';
 
   ngOnInit(): void {
+    this.mediaQueryList = window.matchMedia('(max-width: 1399px)');
+    this.isSmallScreen = this.mediaQueryList.matches;
+    this.mediaQueryList.addEventListener('change', this.handleScreenChange);
+
     this.getActivity();
     this.getSchedule();
   }
+
+  ngOnDestroy(): void {
+    this.mediaQueryList.removeEventListener('change', this.handleScreenChange);
+  }
+
+  handleScreenChange = (event: MediaQueryListEvent): void => {
+    this.isSmallScreen = event.matches;
+  };
+
 }

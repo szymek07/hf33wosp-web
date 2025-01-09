@@ -102,7 +102,7 @@
       <h3>HF33WOSP</h3>
     </div>
 
-    <div>
+    <div class="text-responsive">
       <p>
         Dziękujemy za udział w akcji dyplomowej pod znakiem HF33WOSP zorganizowanej przez Harcerski Klub Łączności RadioAktywni! <br />
         Znajdziesz tutaj informacje na temat naszych planowanych aktywności.
@@ -148,26 +148,24 @@
 
     <div *ngIf="loadingSchedule" class="spinner">
     </div>
-    <div  *ngIf="scheduleResponse.length > 0 && !loadingSchedule">
+    <div  class="table-responsive-xl w-auto table-sm table-bordered small-text border-secondary" *ngIf="scheduleResponse.length > 0 && !loadingSchedule">
       <h3>Harmonogram pracy operatorów pod znakiem HF33WOSP</h3>
-      <table class="table table-sm table-bordered small-text border-secondary">
+      <table class="table">
       <thead class="thead-dark">
       <tr>
         <th class="header-col">Data/Godzina[LT]</th>
-        <th class="fix-col-size header-col" *ngFor="let hour of hours">{{ hour }}</th>
+        <th class="header-col fix-col-size" *ngFor="let hour of hours">{{ hour }}</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let response of scheduleResponse; let i = index">
         <td class="fix-col-size date-col">{{ response.date }}</td>
         <td class="fix-col-size oth-col" *ngFor="let hour of hours">{{ response["h" + hour.toString()] }}</td>
-
       </tr>
       </tbody>
       </table>
       <hr />
     </div>
-
 
     <h3>Wpisz swój znak aby pobrać dyplom</h3>
 
